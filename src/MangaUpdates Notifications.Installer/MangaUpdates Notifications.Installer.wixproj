@@ -1,0 +1,17 @@
+﻿<Project Sdk="WixToolset.Sdk/4.0.3">
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <SuppressPdbOutput>true</SuppressPdbOutput>
+  </PropertyGroup>
+  <Target Name="PublishAppx64" BeforeTargets="BeforeBuild" Condition="'$(Platform)'=='x64'">
+    <Exec Command="dotnet publish &quot;..\MangaUpdates Notifications\MangaUpdates Notifications.csproj&quot; -c $(Configuration) -a x64 -o &quot;$(TargetDir)Publish&quot; --self-contained true -p:PublishSingleFile=true -p:AppendRuntimeIdentifierToOutputPath=true -p:OutputPath=&quot;$(TargetDir)Build&quot;" />
+  </Target>
+  <Target Name="PublishAppx86" BeforeTargets="BeforeBuild" Condition="'$(Platform)'=='x86'">
+    <Exec Command="dotnet publish &quot;..\MangaUpdates Notifications\MangaUpdates Notifications.csproj&quot; -c $(Configuration) -a x86 -o &quot;$(TargetDir)Publish&quot; --self-contained true -p:PublishSingleFile=true -p:AppendRuntimeIdentifierToOutputPath=true -p:OutputPath=&quot;$(TargetDir)Build&quot;" />
+  </Target>
+  <Target Name="PublishAppARM64" BeforeTargets="BeforeBuild" Condition="'$(Platform)'=='ARM64'">
+    <Exec Command="dotnet publish &quot;..\MangaUpdates Notifications\MangaUpdates Notifications.csproj&quot; -c $(Configuration) -a arm64 -o &quot;$(TargetDir)Publish&quot; --self-contained true -p:PublishSingleFile=true -p:AppendRuntimeIdentifierToOutputPath=true -p:OutputPath=&quot;$(TargetDir)Build&quot;" />
+  </Target>
+  <Target Name="FullClean" AfterTargets="Clean">
+    <RemoveDir Directories="$(TargetDir)" />
+  </Target>
+</Project>

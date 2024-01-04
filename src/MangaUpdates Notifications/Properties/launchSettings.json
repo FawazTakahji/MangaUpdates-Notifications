@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "MangaUpdates Notifications": {
+      "commandName": "Project"
+    },
+    "Minimize": {
+      "commandName": "Project",
+      "commandLineArgs": "--minimize"
+    },
+    "Portable": {
+      "commandName": "Project",
+      "commandLineArgs": "--portable"
+    }
+  }
+}

@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="MangaUpdates_Notifications.Controls.AccentColorPicker"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MangaUpdates_Notifications.Controls"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance local:AccentColorPicker, IsDesignTimeCreatable=True}">
+    <StackPanel d:Background="White">
+        <ui:SplitButton x:Name="ColorButton" AutomationProperties.Name="Font color" Padding="0" MinHeight="0" MinWidth="0" VerticalAlignment="Top">
+            <Rectangle x:Name="CurrentColor" Width="32" Height="32" Fill="{Binding Fill, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}" Margin="0" />
+            <ui:SplitButton.Flyout>
+                <ui:Flyout Placement="BottomEdgeAlignedLeft">
+                    <StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <TextBox x:Name="ColorTextBox" ui:ControlHelper.PlaceholderText="Hex or ARGB or Media.Colors value" Margin="0,0,0,10"/>
+                            <Button Content="Set" HorizontalAlignment="Stretch" Margin="0,0,0,10" Click="SetColor"/>
+                        </StackPanel>
+                        <ui:ScrollViewerEx Height="370">
+                            <UniformGrid x:Name="ColorsGrid" Columns="5" Margin="0,0,15,0">
+                                <UniformGrid.Resources>
+                                    <Style TargetType="Rectangle">
+                                        <Setter Property="Width" Value="32" />
+                                        <Setter Property="Height" Value="32" />
+                                    </Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+                                        <Setter Property="Padding" Value="0" />
+                                        <Setter Property="MinWidth" Value="0" />
+                                        <Setter Property="MinHeight" Value="0" />
+                                        <Setter Property="Margin" Value="6" />
+                                    </Style>
+                                </UniformGrid.Resources>
+                            </UniformGrid>
+                        </ui:ScrollViewerEx>
+                    </StackPanel>
+                </ui:Flyout>
+            </ui:SplitButton.Flyout>
+        </ui:SplitButton>
+    </StackPanel>
+</UserControl>

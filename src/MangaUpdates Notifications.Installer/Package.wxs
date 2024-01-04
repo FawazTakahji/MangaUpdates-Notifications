@@ -1,0 +1,22 @@
+﻿<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="MangaUpdates Notifications" Manufacturer="FawazTakhji" Version="!(bind.fileVersion.MainExe)" UpgradeCode="41aab199-e5f3-4962-a763-bd8b2aab5bee" Compressed="true" Scope="perUser">
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed."/>
+	<MediaTemplate EmbedCab="true"/>
+	<!-- These properties will show up in "Add or remove programs" -->
+	<Property Id="ARPPRODUCTICON" Value="AppIcon" />
+	<Property Id="ARPURLINFOABOUT" Value="https://github.com/FawazTakhji/MangaUpdates-Notifications" />
+
+    <Feature Id="Main">
+      <ComponentGroupRef Id="Components"/>
+    </Feature>
+
+	<InstallExecuteSequence>
+		<Custom Action="CleanFiles" Before="InstallInitialize" Condition="REMOVE=&quot;ALL&quot; AND NOT UPGRADINGPRODUCTCODE" />
+
+		<Custom Action="StartApp" After="InstallFinalize" Condition="NOT Installed OR WIX_UPGRADE_DETECTED" />
+	</InstallExecuteSequence>
+
+	<Icon Id="AppIcon" SourceFile="..\MangaUpdates Notifications\Icon.ico"/>
+  </Package>
+</Wix>

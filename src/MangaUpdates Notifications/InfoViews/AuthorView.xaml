@@ -1,0 +1,125 @@
+﻿<UserControl x:Class="MangaUpdates_Notifications.InfoViews.AuthorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:behaviors="clr-namespace:MangaUpdates_Notifications.Behaviors"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:local="clr-namespace:MangaUpdates_Notifications.InfoViews"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             mc:Ignorable="d"
+             d:DesignHeight="300" d:DesignWidth="300" d:DataContext="{d:DesignInstance local:AuthorView, IsDesignTimeCreatable=True}">
+    <Grid>
+        <ScrollViewer x:Name="Viewer" Visibility="Hidden" Margin="15,0,15,10" HorizontalAlignment="Stretch">
+            <i:Interaction.Behaviors>
+                <behaviors:VerticalScrollBarEdit Margin="0,0,-15,-10" />
+            </i:Interaction.Behaviors>
+            <StackPanel>
+                <StackPanel.Resources>
+                    <Thickness x:Key="CommonMargin" Left="10" Right="10" Top="5" Bottom="5" />
+                </StackPanel.Resources>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{Binding Data.Name}" ToolTip="{Binding Data.Name}" Style="{StaticResource HeaderTextBlockStyle}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis" Padding="10" Margin="0,0,0,10"/>
+                    <Button Style="{StaticResource AccentButtonStyle}" Command="{Binding OpenLinkCommand}" CommandParameter="{Binding Data.Url}" Grid.Column="1" Margin="{StaticResource CommonMargin}">
+                        <StackPanel Orientation="Horizontal">
+                            <ui:PathIcon Data="{StaticResource EarthIcon}" Width="24" Height="24"/>
+                            <TextBlock Text="Open in Browser" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+                <WrapPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Image x:Name="Image" Width="150" Height="250" VerticalAlignment="Top" Margin="{StaticResource CommonMargin}" />
+
+                    <!-- Actual Name -->
+                    <StackPanel Visibility="{Binding Data.ActualName, Converter={StaticResource StringToVis}}">
+                        <TextBlock Text="Actual Name" FontSize="20" Padding="5" Background="{StaticResource SystemControlBackgroundAccentBrush}" Margin="{StaticResource CommonMargin}"/>
+                        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Data.ActualName}" Margin="{StaticResource CommonMargin}"/>
+                    </StackPanel>
+                    <!-- Actual Name -->
+
+                    <!-- Birthday -->
+                    <StackPanel Visibility="{Binding Data.Birthday.String, Converter={StaticResource StringToVis}}">
+                        <TextBlock Text="Birthday" FontSize="20" Padding="5" Background="{StaticResource SystemControlBackgroundAccentBrush}" Margin="{StaticResource CommonMargin}"/>
+                        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Data.Birthday.String}" Margin="{StaticResource CommonMargin}"/>
+                    </StackPanel>
+                    <!-- Birthday -->
+
+                    <!-- Zodiac -->
+                    <StackPanel Visibility="{Binding Data.Birthday.Zodiac, Converter={StaticResource StringToVis}}">
+                        <TextBlock Text="Zodiac" FontSize="20" Padding="5" Background="{StaticResource SystemControlBackgroundAccentBrush}" Margin="{StaticResource CommonMargin}"/>
+                        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Data.Birthday.Zodiac}" Margin="{StaticResource CommonMargin}"/>
+                    </StackPanel>
+                    <!-- Zodiac -->
+
+                    <!-- Birth Place -->
+                    <StackPanel Visibility="{Binding Data.BirthPlace, Converter={StaticResource StringToVis}}">
+                        <TextBlock Text="Birth Place" FontSize="20" Padding="5" Background="{StaticResource SystemControlBackgroundAccentBrush}" Margin="{StaticResource CommonMargin}"/>
+                        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Data.BirthPlace}" Margin="{StaticResource CommonMargin}"/>
+                    </StackPanel>
+                    <!-- Birth Place -->
+
+                    <!-- Blood Type -->
+                    <StackPanel Visibility="{Binding Data.BloodType, Converter={StaticResource StringToVis}}">
+                        <TextBlock Text="Blood Type" FontSize="20" Padding="5" Background="{StaticResource SystemControlBackgroundAccentBrush}" Margin="{StaticResource CommonMargin}"/>
+                        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Data.BloodType}" Margin="{StaticResource CommonMargin}"/>
+                    </StackPanel>
+                    <!-- Blood Type -->
+
+                    <!-- Gender -->
+                    <StackPanel Visibility="{Binding Data.Gender, Converter={StaticResource StringToVis}}">
+                        <TextBlock Text="Gender" FontSize="20" Padding="5" Background="{StaticResource SystemControlBackgroundAccentBrush}" Margin="{StaticResource CommonMargin}"/>
+                        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Data.Gender}" Margin="{StaticResource CommonMargin}"/>
+                    </StackPanel>
+                    <!-- Gender -->
+
+                    <!-- Total Series -->
+                    <StackPanel>
+                        <TextBlock Text="Total Series" FontSize="20" Padding="5" Background="{StaticResource SystemControlBackgroundAccentBrush}" Margin="{StaticResource CommonMargin}"/>
+                        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Data.Stats.TotalSeries}" Margin="{StaticResource CommonMargin}"/>
+                    </StackPanel>
+                    <!-- Total Series -->
+
+                    <!-- Social -->
+                    <StackPanel Visibility="{Binding SocialVisibility}">
+                        <TextBlock Text="Social" FontSize="20" Padding="5" Background="{StaticResource SystemControlBackgroundAccentBrush}" Margin="{StaticResource CommonMargin}"/>
+                        <ui:HyperlinkButton Content="Official Site" HorizontalAlignment="Center" Margin="{StaticResource CommonMargin}" Visibility="{Binding SiteVisibility}"
+                                            Command="{Binding OpenLinkCommand}" CommandParameter="{Binding Data.Social.OfficialSite}"/>
+                        <ui:HyperlinkButton Content="Twitter" HorizontalAlignment="Center" Margin="{StaticResource CommonMargin}" Visibility="{Binding TwitterVisibility}"
+                                            Command="{Binding OpenLinkCommand}" CommandParameter="{Binding Data.Social.Twitter}"/>
+                        <ui:HyperlinkButton Content="Facebook" HorizontalAlignment="Center" Margin="{StaticResource CommonMargin}" Visibility="{Binding FacebookVisibility}"
+                                            Command="{Binding OpenLinkCommand}" CommandParameter="{Binding Data.Social.Facebook}"/>
+                    </StackPanel>
+                    <!-- Social -->
+
+                    <!-- Notes -->
+                    <StackPanel Visibility="{Binding Data.Notes, Converter={StaticResource StringToVis}}">
+                        <TextBlock Text="Notes" FontSize="20" Padding="5" Background="{StaticResource SystemControlBackgroundAccentBrush}" Margin="{StaticResource CommonMargin}"/>
+                        <TextBlock TextWrapping="Wrap" Text="{Binding Data.Notes}" HorizontalAlignment="Center" Margin="{StaticResource CommonMargin}"/>
+                    </StackPanel>
+                    <!-- Notes -->
+
+                    <!-- Genres -->
+                    <StackPanel Visibility="{Binding Data.GenresText, Converter={StaticResource StringToVis}}">
+                        <TextBlock Text="Genres" FontSize="20" Padding="5" Background="{StaticResource SystemControlBackgroundAccentBrush}" Margin="{StaticResource CommonMargin}"/>
+                        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Data.GenresText}" Margin="{StaticResource CommonMargin}"/>
+                    </StackPanel>
+                    <!-- Genres -->
+
+                    <!-- Last Updated -->
+                    <StackPanel Visibility="{Binding Data.LastUpdated.String, Converter={StaticResource StringToVis}}">
+                        <TextBlock Text="Last Updated" FontSize="20" Padding="5" Background="{StaticResource SystemControlBackgroundAccentBrush}" Margin="{StaticResource CommonMargin}"/>
+                        <TextBlock HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding Data.LastUpdated.String}" Margin="{StaticResource CommonMargin}"/>
+                    </StackPanel>
+                    <!-- Last Updated -->
+
+                </WrapPanel>
+            </StackPanel>
+        </ScrollViewer>
+        <ui:ProgressRing x:Name="Ring" Foreground="{DynamicResource SystemControlBackgroundBaseHighBrush}" IsActive="True"
+                             Width="250" Height="250" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Grid>
+</UserControl>

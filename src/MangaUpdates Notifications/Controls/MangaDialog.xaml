@@ -1,0 +1,54 @@
+﻿<ui:ContentDialog
+             x:Class="MangaUpdates_Notifications.Controls.MangaDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:local="clr-namespace:MangaUpdates_Notifications.Controls"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800" d:DataContext="{d:DesignInstance local:MangaDialog, IsDesignTimeCreatable=True}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="8.8*"/>
+            <ColumnDefinition Width="1.2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ComboBox ui:ControlHelper.Header="Scanlator" Margin="0,0,5,0" HorizontalAlignment="Stretch" VerticalAlignment="Center"
+                  IsEnabled="{Binding AnyScanlator, Converter={StaticResource BoolInvert}}" ItemsSource="{Binding Scanlators}"
+                 SelectedItem="{Binding SelectedScanlator}" Visibility="{Binding CbVisibility}"/>
+
+        <CheckBox Content="Any" Grid.Column="1" VerticalAlignment="Center" ToolTip="Checking this option will enable notifications for new chapter releases by any scanlator."
+                  IsChecked="{Binding AnyScanlator}" Margin="0,24,0,0"
+                  Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}, ConverterParameter='inverted,hidden'}"/>
+
+        <StackPanel Grid.ColumnSpan="2" Grid.Row="1" Orientation="Horizontal" Margin="0,10,0,5"
+                    Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}, ConverterParameter='inverted,hidden'}">
+            <StackPanel Visibility="{Binding LatestRelease.Title, Converter={StaticResource StringToVis}}">
+                <TextBlock Text="Latest Release" Style="{StaticResource CaptionTextBlockStyle}"/>
+                <TextBlock Text="{Binding LatestRelease.DisplayTitle, Mode=OneWay}" Style="{StaticResource BaseTextBlockStyle}"/>
+            </StackPanel>
+            <StackPanel Margin="10,0,0,0" Visibility="{Binding LatestRelease.Scanlator, Converter={StaticResource StringToVis}}">
+                <TextBlock Text="By" Style="{StaticResource CaptionTextBlockStyle}"/>
+                <TextBlock Text="{Binding LatestRelease.Scanlator}" Style="{StaticResource BaseTextBlockStyle}"/>
+            </StackPanel>
+        </StackPanel>
+
+        <Grid Grid.Row="2" Grid.ColumnSpan="2" >
+            <Button Content="Cancel" HorizontalAlignment="Left" Click="Cancel_Click" />
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Remove" Margin="10" Click="Remove_Click"
+                        Visibility="{Binding InLibrary, Converter={StaticResource BoolToVis}, ConverterParameter='normal,collapsed'}"/>
+                <Button Content="OK" Click="OK_Click" Style="{StaticResource AccentButtonStyle}"
+                        Visibility="{Binding IsLoading, Converter={StaticResource BoolToVis}, ConverterParameter='inverted,hidden'}"/>
+            </StackPanel>
+        </Grid>
+
+        <ui:ProgressRing Grid.ColumnSpan="2" Grid.RowSpan="2" IsActive="{Binding IsLoading}"
+                         Width="100" Height="100"/>
+    </Grid>
+</ui:ContentDialog>

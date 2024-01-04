@@ -1,0 +1,53 @@
+﻿<Window x:Class="MangaUpdates_Notifications.Views.MainWindowView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ui="http://schemas.modernwpf.com/2019"
+        xmlns:tb="clr-namespace:H.NotifyIcon;assembly=H.NotifyIcon.Wpf"
+        xmlns:vms="clr-namespace:MangaUpdates_Notifications.ViewModels"
+        xmlns:local="clr-namespace:MangaUpdates_Notifications.Views"
+        mc:Ignorable="d"
+        ui:WindowHelper.UseModernWindowStyle="True"
+        ui:TitleBar.IsIconVisible="True"
+        ui:TitleBar.Background="{DynamicResource AppBackgroundBrush}"
+        d:DesignHeight="500" d:DesignWidth="875"
+        d:DataContext="{d:DesignInstance vms:MainWindowViewModel, IsDesignTimeCreatable=True}"
+        MinHeight="500" MinWidth="875"
+        Title="MangaUpdates Notifacations" Icon="../Icon.ico" WindowStartupLocation="CenterScreen"
+        SourceInitialized="Window_SourceInitialized" Closing="Window_Closing">
+    <Window.InputBindings>
+        <KeyBinding Key="W" Modifiers="Ctrl" Command="{Binding RemoveItemCommand}" CommandParameter="{Binding SelectedItem}"/>
+    </Window.InputBindings>
+    <Window.Resources>
+        <ContextMenu x:Key="ContextMenu" Opened="ContextMenu_Opened">
+            <MenuItem Click="ToggleWindow_Click"/>
+            <MenuItem Header="Exit" Click="Exit_Click">
+                <MenuItem.Icon>
+                    <ui:PathIcon Data="{StaticResource CloseIcon}"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </Window.Resources>
+
+    <Grid Background="{DynamicResource AppBackgroundBrush}">
+        <ui:NavigationView PaneDisplayMode="LeftCompact" IsTabStop="False" IsBackButtonVisible="Collapsed" IsBackEnabled="False" IsSettingsVisible="False" Loaded="NavigationView_Loaded"
+                           SelectedItem="{Binding SelectedItem, Mode=TwoWay}" MenuItemsSource="{Binding MenuItems}" FooterMenuItemsSource="{Binding FooterMenuItems}">
+            <ui:NavigationView.Resources>
+                <SolidColorBrush x:Name="NavigationViewDefaultPaneBackground" x:Key="NavigationViewDefaultPaneBackground" Color="{DynamicResource AppBackgroundColor}"/>
+            </ui:NavigationView.Resources>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Rectangle Fill="{DynamicResource SystemControlBackgroundAccentBrush}" Width="1"/>
+                <ui:Frame Grid.Column="1" Content="{Binding FrameContent}"/>
+            </Grid>
+        </ui:NavigationView>
+
+        <tb:TaskbarIcon x:Name="TrayIcon" IconSource="../Icon.ico" ToolTipText="MangaUpdates Notifications" ContextMenu="{StaticResource ContextMenu}"
+                        LeftClickCommand="{Binding ToggleWindowCommand, RelativeSource={RelativeSource AncestorType=Window}}" NoLeftClickDelay="True" />
+    </Grid>
+</Window>

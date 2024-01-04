@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="MangaUpdates_Notifications.Views.NotificationsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MangaUpdates_Notifications.Views"
+             xmlns:vms="clr-namespace:MangaUpdates_Notifications.ViewModels"
+             xmlns:controls="clr-namespace:MangaUpdates_Notifications.Controls"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:behaviors="clr-namespace:MangaUpdates_Notifications.Behaviors"
+             mc:Ignorable="d"
+             Loaded="View_Loaded"
+             d:DataContext="{d:DesignInstance vms:NotificationsViewModel, IsDesignTimeCreatable=True}">
+    <Grid Margin="15,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Notifications" Style="{StaticResource HeaderTextBlockStyle}"/>
+            <Button Content="Mark all as read" VerticalAlignment="Center" Margin="10,0,0,-10" Style="{StaticResource AccentButtonStyle}" Command="{Binding ClearNotificationsCommand}"/>
+        </StackPanel>
+        <!-- Header -->
+
+        <ScrollViewer Grid.Row="1">
+            <i:Interaction.Behaviors>
+                <behaviors:VerticalScrollBarEdit Margin="0,0,-15,0" />
+            </i:Interaction.Behaviors>
+
+            <ItemsControl x:Name="itemsControl" ItemsSource="{Binding Notifications}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:NotificationCard Margin="0,5" MangaTitle="{Binding Title}" ImageUrl="{Binding ImageUrl}" Chapter="{Binding Chapter}" Scanlator="{Binding Scanlator}"
+                                                   Command="{Binding DataContext.RemoveNotificationCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,256 @@
+﻿<UserControl x:Class="MangaUpdates_Notifications.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MangaUpdates_Notifications.Views"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:controls="clr-namespace:MangaUpdates_Notifications.Controls"
+             xmlns:vms="clr-namespace:MangaUpdates_Notifications.ViewModels"
+             d:DataContext="{d:DesignInstance vms:SettingsViewModel, IsDesignTimeCreatable=True}"
+             mc:Ignorable="d" Unloaded="ViewUnloaded">
+    <Grid d:Background="White">
+        <Grid.Resources>
+            <Style TargetType="CheckBox" BasedOn="{StaticResource DefaultCheckBoxStyle}">
+                <Setter Property="MinWidth" Value="0" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer>
+            <ui:SimpleStackPanel Spacing="15" Margin="15,0">
+                <!-- Personalization -->
+                <ui:SimpleStackPanel Spacing="5">
+                    <!-- Header -->
+                    <TextBlock Text="Personalization" Style="{StaticResource HeaderTextBlockStyle}"/>
+                    <!-- Header -->
+
+                    <ui:SimpleStackPanel Orientation="Horizontal" VerticalAlignment="Center" Spacing="15">
+                        <TextBlock Text="Theme" Style="{StaticResource TitleTextBlockStyle}"/>
+                        <controls:ThemeButton CurrentTheme="{Binding AppSettings.Personalization.Theme, Mode=TwoWay}"/>
+                        <TextBlock Text="Accent" Style="{StaticResource TitleTextBlockStyle}"/>
+                        <controls:AccentColorPicker Fill="{Binding AppSettings.Personalization.Accent, Converter={StaticResource ColorToBrush}, Mode=TwoWay}"/>
+                    </ui:SimpleStackPanel>
+
+                    <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="Release Check Frequency" Style="{StaticResource TitleTextBlockStyle}" Margin="0,12,0,0" VerticalAlignment="Center"/>
+                        <ui:NumberBox Header="Hours" SmallChange="1" Minimum="1" Maximum="24" Value="{Binding AppSettings.Personalization.Interval.Hours}" SpinButtonPlacementMode="Inline"/>
+                        <ui:NumberBox Header="Minutes" SmallChange="10" Minimum="0" Maximum="60" Value="{Binding AppSettings.Personalization.Interval.Minutes}" SpinButtonPlacementMode="Inline"/>
+                    </ui:SimpleStackPanel>
+
+                    <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
+                        <CheckBox Content="Windows Notifications" ToolTip="Show Windows notifications when a new chapter is released" IsChecked="{Binding AppSettings.Personalization.WindowsNotifications}"/>
+                        <CheckBox Content="Check Updates" ToolTip="Check for updates when the application first launches" IsChecked="{Binding AppSettings.Personalization.CheckUpdates}"/>
+                    </ui:SimpleStackPanel>
+
+                    <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
+                        <CheckBox Content="Run on startup" IsChecked="{Binding Startup.InStartup}"/>
+                        <CheckBox Content="Minimized" IsChecked="{Binding Startup.Minimized}"
+                                  Visibility="{Binding Startup.InStartup, Converter={StaticResource BoolToVis}, ConverterParameter='normal,collapsed'}"/>
+                        <CheckBox Content="Portable" IsChecked="{Binding Startup.Portable}"
+                                  Visibility="{Binding Startup.InStartup, Converter={StaticResource BoolToVis}, ConverterParameter='normal,collapsed'}"/>
+                    </ui:SimpleStackPanel>
+                </ui:SimpleStackPanel>
+                <!-- Personalization -->
+
+                <Separator Background="{DynamicResource SystemControlBackgroundAccentBrush}"/>
+
+                <!-- Discord Webhooks -->
+                <StackPanel>
+                    <!-- Header -->
+                    <ui:SimpleStackPanel Orientation="Horizontal" Spacing="10">
+                        <TextBlock Text="Discord Webhooks" Style="{StaticResource HeaderTextBlockStyle}"/>
+                        <CheckBox Content="Enabled" IsChecked="{Binding AppSettings.DiscordWebhook.Enabled}" Margin="0,0,0,-10" VerticalAlignment="Center"/>
+                        <Button Style="{StaticResource AccentButtonStyle}" ToolTip="Add" Command="{Binding AppSettings.DiscordWebhook.AddWebhookCommand}" Visibility="{Binding AppSettings.DiscordWebhook.Enabled, Converter={StaticResource BoolToVis}, ConverterParameter='normal,collapsed'}"
+                                Margin="0,0,0,-10" VerticalAlignment="Center">
+                            <ui:PathIcon Data="{StaticResource AddIcon}" Height="12" Width="12"/>
+                        </Button>
+                    </ui:SimpleStackPanel>
+                    <!-- Header -->
+
+                    <ItemsControl ItemsSource="{Binding AppSettings.DiscordWebhook.Webhooks}" Visibility="{Binding AppSettings.DiscordWebhook.Enabled, Converter={StaticResource BoolToVis}, ConverterParameter='normal,collapsed'}" Margin="5">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox Text="{Binding String, UpdateSourceTrigger=PropertyChanged}" ui:ControlHelper.PlaceholderText="Webhook" Margin="0,0,5,10"/>
+                                    <ui:SimpleStackPanel Orientation="Horizontal" Grid.Column="1" Spacing="5" Margin="0,0,0,10">
+                                        <Button ToolTip="Remove" Command="{Binding DataContext.AppSettings.DiscordWebhook.RemoveWebhookCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                CommandParameter="{Binding}">
+                                            <ui:PathIcon Data="{StaticResource CloseIcon}" Height="12" Width="12"/>
+                                        </Button>
+                                        <Button ToolTip="Test" Command="{Binding DataContext.TestWebhookCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding String}"
+                                                IsEnabled="{Binding String, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBool}}" Style="{StaticResource AccentButtonStyle}">
+                                            <ui:PathIcon Data="{StaticResource PlayIcon}" Height="12" Width="12"/>
+                                        </Button>
+                                    </ui:SimpleStackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                <!-- Discord Webhooks -->
+
+                <Separator Background="{DynamicResource SystemControlBackgroundAccentBrush}"/>
+
+                <!-- Discord Bot -->
+                <StackPanel>
+                    <!-- Header -->
+                    <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                        <TextBlock Text="Discord Bot" Style="{StaticResource HeaderTextBlockStyle}"/>
+                        <CheckBox Content="Enabled" IsChecked="{Binding AppSettings.DiscordBot.Enabled}" Margin="0,0,0,-10" VerticalAlignment="Center"/>
+                    </ui:SimpleStackPanel>
+                    <!-- Header -->
+
+                    <ui:SimpleStackPanel Spacing="10" Margin="5,5,5,0" Visibility="{Binding AppSettings.DiscordBot.Enabled, Converter={StaticResource BoolToVis}, ConverterParameter='normal,collapsed'}">
+                        <TextBox Text="{Binding AppSettings.DiscordBot.Token, UpdateSourceTrigger=PropertyChanged}" ui:ControlHelper.Header="Bot Token"/>
+
+                        <!-- Users -->
+                        <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                            <TextBlock Text="Users" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                            <Button Style="{StaticResource AccentButtonStyle}" ToolTip="Add" VerticalAlignment="Center" Margin="0,0,0,-10" Command="{Binding AppSettings.DiscordBot.AddUserCommand}">
+                                <ui:PathIcon Data="{StaticResource AddIcon}" Width="12" Height="12"/>
+                            </Button>
+                        </ui:SimpleStackPanel>
+                        <ItemsControl ItemsSource="{Binding AppSettings.DiscordBot.Users}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Text="{Binding String, UpdateSourceTrigger=PropertyChanged}" ui:ControlHelper.PlaceholderText="User ID" Margin="0,0,0,10" Grid.Column="0"/>
+                                        <ui:SimpleStackPanel Spacing="5" Orientation="Horizontal" Grid.Column="1" Margin="5,0,0,10">
+                                            <Button ToolTip="Remove" Command="{Binding DataContext.AppSettings.DiscordBot.RemoveUserCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}">
+                                                <ui:PathIcon Data="{StaticResource CloseIcon}" Height="12" Width="12"/>
+                                            </Button>
+                                            <Button ToolTip="Test" Command="{Binding DataContext.TestUserCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding String}"
+                                                    IsEnabled="{Binding String, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBool}}" Style="{StaticResource AccentButtonStyle}">
+                                                <ui:PathIcon Data="{StaticResource PlayIcon}" Height="12" Width="12"/>
+                                            </Button>
+                                        </ui:SimpleStackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <!-- Users -->
+
+                        <!-- Channels -->
+                        <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                            <TextBlock Text="Channels" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                            <Button Style="{StaticResource AccentButtonStyle}" ToolTip="Add" VerticalAlignment="Center" Margin="0,0,0,-10" Command="{Binding AppSettings.DiscordBot.AddChannelCommand}">
+                                <ui:PathIcon Data="{StaticResource AddIcon}" Width="12" Height="12"/>
+                            </Button>
+                        </ui:SimpleStackPanel>
+                        <ItemsControl ItemsSource="{Binding AppSettings.DiscordBot.Channels}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Text="{Binding String, UpdateSourceTrigger=PropertyChanged}" ui:ControlHelper.PlaceholderText="Channel ID" Margin="0,0,0,10" Grid.Column="0"/>
+                                        <ui:SimpleStackPanel Spacing="5" Orientation="Horizontal" Grid.Column="1" Margin="5,0,0,10">
+                                            <Button ToolTip="Remove" Command="{Binding DataContext.AppSettings.DiscordBot.RemoveChannelCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding}">
+                                                <ui:PathIcon Data="{StaticResource CloseIcon}" Height="12" Width="12"/>
+                                            </Button>
+                                            <Button ToolTip="Test" Command="{Binding DataContext.TestChannelCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding String}"
+                                                    IsEnabled="{Binding String, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBool}}" Style="{StaticResource AccentButtonStyle}">
+                                                <ui:PathIcon Data="{StaticResource PlayIcon}" Height="12" Width="12"/>
+                                            </Button>
+                                        </ui:SimpleStackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <!-- Channels -->
+                    </ui:SimpleStackPanel>
+                </StackPanel>
+                <!-- Discord Bot -->
+
+                <Separator Background="{DynamicResource SystemControlBackgroundAccentBrush}"/>
+
+                <!-- PushBullet -->
+                <StackPanel>
+                    <!-- Header -->
+                    <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                        <TextBlock Text="PushBullet" Style="{StaticResource HeaderTextBlockStyle}"/>
+                        <CheckBox Content="Enabled" IsChecked="{Binding AppSettings.PushBullet.Enabled}" Margin="0,0,0,-10" VerticalAlignment="Center"/>
+                    </ui:SimpleStackPanel>
+                    <!-- Header -->
+
+                    <ui:SimpleStackPanel Visibility="{Binding AppSettings.PushBullet.Enabled, Converter={StaticResource BoolToVis}, ConverterParameter='normal,collapsed'}" Spacing="10" Margin="5,5,5,0">
+                        <!-- Token -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="{Binding AppSettings.PushBullet.Token, UpdateSourceTrigger=PropertyChanged}" ui:ControlHelper.Header="Access Token" HorizontalAlignment="Stretch"/>
+                            <Button Grid.Column="1" Margin="5,23,0,0" Style="{StaticResource AccentButtonStyle}" ToolTip="Test" Command="{Binding TestPushBulletDeviceCommand}"
+                                    IsEnabled="{Binding AppSettings.PushBullet.Token, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBool}}">
+                                <ui:PathIcon Data="{StaticResource PlayIcon}" Height="12" Width="12"/>
+                            </Button>
+                        </Grid>
+                        <!-- Token -->
+
+                        <!-- Devices Header -->
+                        <ui:SimpleStackPanel Spacing="10" Orientation="Horizontal">
+                            <TextBlock Text="Devices" Style="{StaticResource SubheaderTextBlockStyle}"/>
+                            <CheckBox VerticalAlignment="Bottom"  IsChecked="{Binding AppSettings.PushBullet.AllDevices}"
+                                      Content="All Devices" ToolTip="Send notifications to all PushBullet devices."/>
+                            <Button Style="{StaticResource AccentButtonStyle}" ToolTip="Add" VerticalAlignment="Center" Margin="0,0,0,-10" Command="{Binding AppSettings.PushBullet.AddDeviceCommand}"
+                                    Visibility="{Binding AppSettings.PushBullet.AllDevices, Converter={StaticResource BoolToVis}, ConverterParameter='inverted,collapsed'}">
+                                <ui:PathIcon Data="{StaticResource AddIcon}" Width="12" Height="12"/>
+                            </Button>
+                        </ui:SimpleStackPanel>
+                        <!-- Devices Header -->
+
+                        <ItemsControl ItemsSource="{Binding AppSettings.PushBullet.Devices}"
+                                      Visibility="{Binding AppSettings.PushBullet.AllDevices, Converter={StaticResource BoolToVis}, ConverterParameter='inverted,collapsed'}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Text="{Binding String, UpdateSourceTrigger=PropertyChanged}" ui:ControlHelper.PlaceholderText="Device Iden" Margin="0,0,0,10" Grid.Column="0"/>
+                                        <ui:SimpleStackPanel Spacing="5" Orientation="Horizontal" Grid.Column="1" Margin="5,0,0,10">
+                                            <Button ToolTip="Remove" Command="{Binding DataContext.AppSettings.PushBullet.RemoveDeviceCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                                    CommandParameter="{Binding}">
+                                                <ui:PathIcon Data="{StaticResource CloseIcon}" Height="12" Width="12"/>
+                                            </Button>
+                                            <Button ToolTip="Test" Command="{Binding DataContext.TestPushBulletDeviceCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding String}"
+                                                    IsEnabled="{Binding String, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource StringToBool}}" Style="{StaticResource AccentButtonStyle}">
+                                                <ui:PathIcon Data="{StaticResource PlayIcon}" Height="12" Width="12"/>
+                                            </Button>
+                                        </ui:SimpleStackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ui:SimpleStackPanel>
+                </StackPanel>
+                <!-- PushBullet -->
+
+            </ui:SimpleStackPanel>
+        </ScrollViewer>
+
+        <Rectangle Fill="{StaticResource SystemControlBackgroundAccentBrush}" Height="3" Grid.Row="1" />
+        <Button Content="Reset" Command="{Binding ResetSettingsCommand}" Grid.Row="2" HorizontalAlignment="Left" Margin="5,5"/>
+        <ui:SimpleStackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" Spacing="5" Margin="5,5">
+            <Button Content="Restore" Command="{Binding RestoreSettingsCommand}"/>
+            <Button Content="Apply" Command="{Binding SaveAndApplySettingsCommand}" Style="{StaticResource AccentButtonStyle}"/>
+        </ui:SimpleStackPanel>
+    </Grid>
+</UserControl>

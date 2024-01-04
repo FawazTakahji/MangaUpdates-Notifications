@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+
+	  <CustomAction
+		  Id="CleanFiles"
+		  Directory="INSTALLFOLDER"
+		  ExeCommand="&quot;[INSTALLFOLDER]/MangaUpdates Notifications.exe&quot; --cleanup"
+		  Execute="immediate"
+		  Return="ignore"
+		  Impersonate="true" />
+
+	  <CustomAction
+		  Id="StartApp"
+		  Directory="INSTALLFOLDER"
+		  ExeCommand="&quot;[INSTALLFOLDER]/MangaUpdates Notifications.exe&quot;"
+		  Execute="immediate"
+		  Return="asyncNoWait"
+		  Impersonate="true" />
+
+  </Fragment>
+</Wix>

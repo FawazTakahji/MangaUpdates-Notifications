@@ -1,0 +1,172 @@
+﻿<UserControl x:Class="MangaUpdates_Notifications.Views.SearchView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:MangaUpdates_Notifications.Views"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:vms="clr-namespace:MangaUpdates_Notifications.ViewModels"
+             xmlns:controls="clr-namespace:MangaUpdates_Notifications.Controls"
+             xmlns:behaviors="clr-namespace:MangaUpdates_Notifications.Behaviors"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance vms:SearchViewModel, IsDesignTimeCreatable=True}" >
+    <Grid d:Background="White" Margin="15,0">
+        <Grid.Resources>
+            <Style x:Key="PageButton" TargetType="Button" BasedOn="{StaticResource AccentButtonStyle}">
+                <Setter Property="MinWidth" Value="40" />
+                <Setter Property="MinHeight" Value="34" />
+                <Setter Property="FontSize" Value="16" />
+                <Setter Property="HorizontalContentAlignment" Value="Center" />
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+            </Style>
+        </Grid.Resources>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <!-- Search Box -->
+        <ui:AutoSuggestBox TextBoxStyle="{StaticResource AutoSuggestBoxTextBoxStyleEx}" Text="{Binding SearchQuery, Mode=TwoWay}"
+                           Name="AutoSuggestBox" Margin="0,10" QuerySubmitted="AutoSuggestBox_QuerySubmitted" Loaded="AutoSuggestBox_Loaded">
+            <ui:AutoSuggestBox.QueryIcon>
+                <ui:PathIcon Data="{StaticResource SearchIcon}"/>
+            </ui:AutoSuggestBox.QueryIcon>
+        </ui:AutoSuggestBox>
+        <!-- Search Box -->
+
+        <!-- Filters -->
+        <Border Name="Filters" Visibility="Collapsed" Background="{DynamicResource FiltersBackgroundBrush}" BorderBrush="{StaticResource SystemControlBackgroundAccentBrush}"
+                BorderThickness="2" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,-5,0,0" Grid.Row="1" Grid.RowSpan="2" CornerRadius="2" Panel.ZIndex="1">
+            <ui:SimpleStackPanel Margin="0,20" Spacing="10" Orientation="Horizontal" HorizontalAlignment="Center">
+                <ToggleButton Content="Artbook" IsChecked="{Binding Filters.Artbook}"/>
+                <ToggleButton Content="Doujinshi" IsChecked="{Binding Filters.Doujinshi}"/>
+                <ToggleButton Content="Manga" IsChecked="{Binding Filters.Manga}"/>
+                <ToggleButton Content="Manhua" IsChecked="{Binding Filters.Manhua}"/>
+                <ToggleButton Content="Manhwa" IsChecked="{Binding Filters.Manhwa}"/>
+                <ToggleButton Content="Novel" IsChecked="{Binding Filters.Novel}"/>
+            </ui:SimpleStackPanel>
+        </Border>
+        <!-- Filters -->
+
+        <!-- Search Results -->
+        <ScrollViewer Visibility="{Binding SearchTextCommand.IsRunning, Converter={StaticResource BoolToVis}, ConverterParameter='inverted,hidden'}"
+                      Grid.Row="2">
+            <i:Interaction.Behaviors>
+                <behaviors:VerticalScrollBarEdit Margin="0,0,-15,0" />
+            </i:Interaction.Behaviors>
+
+            <ItemsControl ItemsSource="{Binding SearchData.Results}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <controls:AlignableWrapPanel HorizontalContentAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <controls:MangaCard Id="{Binding Record.Id}"
+                                            Title="{Binding Record.Title}"
+                                            ImageUrl="{Binding Record.Image.Url.Original}"
+                                            Margin="5"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <!-- Search Results -->
+
+        <!-- Search Navigation -->
+        <Grid Grid.Row="3" Visibility="{Binding SearchData.Pages, Mode=OneWay, Converter={StaticResource ListToVis}}" Margin="0,5,0,0">
+            <Separator Grid.ColumnSpan="3" VerticalAlignment="Top" Background="{DynamicResource SystemControlBackgroundAccentBrush}"/>
+
+            <ui:SimpleStackPanel Spacing="5" HorizontalAlignment="Center" Margin="0,10,0,5">
+                <!-- Page Buttons -->
+                <ui:SimpleStackPanel Spacing="5" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <!-- First Page Button -->
+                    <Button Style="{StaticResource PageButton}" Command="{Binding SearchPageCommand}" ToolTip="First Page">
+                        <ui:PathIcon Data="{StaticResource ChevronDoubleLeftIcon}" />
+                        <Button.CommandParameter>
+                            <sys:Int32>1</sys:Int32>
+                        </Button.CommandParameter>
+                        <Button.IsEnabled>
+                            <MultiBinding Converter="{StaticResource PageToBool}">
+                                <Binding>
+                                    <Binding.Source>
+                                        <sys:Int32>1</sys:Int32>
+                                    </Binding.Source>
+                                </Binding>
+                                <Binding Path="SearchData.CurrentPage"/>
+                            </MultiBinding>
+                        </Button.IsEnabled>
+                    </Button>
+                    <!-- First Page Button -->
+
+                    <!-- Middle Buttons -->
+                    <ItemsControl Grid.Column="1" HorizontalAlignment="Center" ItemsSource="{Binding SearchData.Pages, Mode=OneWay}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ui:SimpleStackPanel Spacing="5" Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Button Style="{StaticResource PageButton}" Content="{Binding }"
+                                        Command="{Binding DataContext.SearchPageCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}" CommandParameter="{Binding }">
+                                    <Button.IsEnabled>
+                                        <MultiBinding Converter="{StaticResource PageToBool}">
+                                            <Binding Path="." />
+                                            <Binding Path="DataContext.SearchData.CurrentPage" RelativeSource="{RelativeSource AncestorType={x:Type ItemsControl}}" />
+                                        </MultiBinding>
+                                    </Button.IsEnabled>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <!-- Middle Buttons -->
+
+                    <!-- Last Page Button -->
+                    <Button Style="{StaticResource PageButton}" Command="{Binding SearchPageCommand}" CommandParameter="{Binding SearchData.TotalPages}" ToolTip="Last Page">
+                        <ui:PathIcon Data="{StaticResource ChevronDoubleRightIcon}" />
+                        <Button.IsEnabled>
+                            <MultiBinding Converter="{StaticResource PageToBool}">
+                                <Binding Path="SearchData.TotalPages"/>
+                                <Binding Path="SearchData.CurrentPage"/>
+                            </MultiBinding>
+                        </Button.IsEnabled>
+                    </Button>
+                    <!-- Last Page Button -->
+                </ui:SimpleStackPanel>
+                <!-- Page Buttons -->
+                <ui:SimpleStackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10">
+                    <!-- Results Info -->
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock>
+                        <Run Text="Results:"/>
+                        <Run Text="{Binding SearchData.TotalHits}"/>
+                        </TextBlock>
+                        <TextBlock>
+                        <Run Text="Pages:" />
+                        <Run Text="{Binding SearchData.TotalPages, Mode=OneWay}"/>
+                        </TextBlock>
+                    </StackPanel>
+                    <!-- Results Info -->
+
+                    <!-- Go Button -->
+                    <StackPanel Orientation="Horizontal">
+                        <ui:NumberBox VerticalAlignment="Center" InputScope="Number" SpinButtonPlacementMode="Inline" SmallChange="1" ValidationMode="InvalidInputOverwritten"
+                                  Value="{Binding BoxNumber}" Maximum="{Binding SearchData.TotalPages}" Loaded="NumberBox_Loaded"/>
+                        <Button Margin="5,0" FontSize="16" Style="{StaticResource AccentButtonStyle}" VerticalAlignment="Center" Content="Go"
+                            Command="{Binding SearchPageCommand}" CommandParameter="{Binding BoxNumber}"/>
+                    </StackPanel>
+                    <!-- Go Button -->
+                </ui:SimpleStackPanel>
+            </ui:SimpleStackPanel>
+        </Grid>
+        <!-- Search Navigation -->
+
+        <ui:ProgressRing Grid.Row="2" IsActive="{Binding SearchTextCommand.IsRunning}" Height="200" Width="200"/>
+    </Grid>
+</UserControl>

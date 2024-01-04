@@ -1,0 +1,35 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+    <ComponentGroup Id="Components" Directory="INSTALLFOLDER">
+      <Component Guid="50706963-1D50-4C6F-B420-D3D6E4AF6C9A">
+
+        <File Id="MainExe" Source="$(TargetDir)Publish\MangaUpdates Notifications.exe" />
+		<File Source="$(TargetDir)Publish\D3DCompiler_47_cor3.dll" />
+		<File Source="$(TargetDir)Publish\PenImc_cor3.dll" />
+		<File Source="$(TargetDir)Publish\PresentationNative_cor3.dll" />
+		<File Source="$(TargetDir)Publish\vcruntime140_cor3.dll" />
+		<File Source="$(TargetDir)Publish\wpfgfx_cor3.dll" />
+
+		<Shortcut
+				Id="MainExeShortcut"
+				Name="!(bind.Property.ProductName)"
+				Target="[INSTALLFOLDER]\MangaUpdates Notifications.exe"
+				Directory="ShortcutFolder"
+				WorkingDirectory="INSTALLFOLDER"
+				Icon="AppIcon" />
+
+		<RegistryValue
+				Id="RegKey"
+				Root="HKCU"
+				Key="Software\!(bind.Property.ProductName)"
+				Name="Path"
+				Type="string"
+				Value="[INSTALLFOLDER]"
+				KeyPath="true" />
+
+		<RemoveFolder Id="RemoveINSTALLFOLDER" Directory="INSTALLFOLDER" On="uninstall" />
+		<RemoveFolder Id="RemoveShortcutFolder" Directory="ShortcutFolder" On="uninstall" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

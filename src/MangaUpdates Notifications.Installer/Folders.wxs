@@ -1,0 +1,13 @@
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Fragment>
+
+    <StandardDirectory Id="LocalAppDataFolder">
+        <Directory Id="INSTALLFOLDER" Name="!(bind.Property.ProductName)" />
+    </StandardDirectory>
+
+	<StandardDirectory Id="ProgramMenuFolder">
+		<Directory Id="ShortcutFolder" Name="!(bind.Property.ProductName)" />
+	</StandardDirectory>
+
+  </Fragment>
+</Wix>
