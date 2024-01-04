@@ -7,35 +7,18 @@
   <h3 align="center">MangaUpdates Notifications</h3>
 
   <p align="center">
-    A simple app to check for new series releases
+    An app to check for new series releases using <a href="https://www.mangaupdates.com">MangaUpdates</a>.
     <br/>
     <br/>
+    <a href="https://github.com/FawazTakhji/MangaUpdates-Notifications/wiki">Wiki</a>
+    .
     <a href="https://github.com/FawazTakhji/MangaUpdates-Notifications/issues/new?labels=bug&template=bug_report.md">Report Bug</a>
     .
     <a href="https://github.com/FawazTakhji/MangaUpdates-Notifications/issues/new?labels=enhancement&template=feature_request.md">Request Feature</a>
   </p>
 </p>
 
-![Downloads](https://img.shields.io/github/downloads/FawazTakhji/MangaUpdates-Notifications/total) ![Contributors](https://img.shields.io/github/contributors/FawazTakhji/MangaUpdates-Notifications?color=dark-green) ![Issues](https://img.shields.io/github/issues/FawazTakhji/MangaUpdates-Notifications) ![License](https://img.shields.io/github/license/FawazTakhji/MangaUpdates-Notifications) 
-
-## Usage
-
-Download the correct version for your system (x64, x86, ARM64), you can install the program or download a compressed version.
-<br/>
-**To use this app you will need Windows 10 version 1809 or higher.**
-
-## Uninstallation
-
-### Installer Version
-
-Simply uninstall the program from your system settings.
-
-### Compressed Version
-
-Start the app with the cleanup command line argument
-> "MangaUpdates Notifications.exe" --cleanup
-
-This will remove any files or registry entries the program has created, after that you can delete the program folder.
+[![version](https://img.shields.io/github/v/release/FawazTakhji/MangaUpdates-Notifications?color=Green&include_prereleases)](https://github.com/FawazTakhji/MangaUpdates-Notifications/releases) ![Contributors](https://img.shields.io/github/contributors/FawazTakhji/MangaUpdates-Notifications?color=dark-green) ![Issues](https://img.shields.io/github/issues/FawazTakhji/MangaUpdates-Notifications)
 
 ## Features
 
@@ -47,11 +30,38 @@ This will remove any files or registry entries the program has created, after th
 * Discord bot channel notifications
 * Pushbullet notifications
 
+## Usage
+
+Download the correct version for your system (x64, x86, ARM64) from the releases page, you can install the app or download a compressed version.
+
+If you want the app to store its data in the app folder you can use the portable command line argument, you might need to start the app as an administrator depending on the folder.
+> "MangaUpdates Notifications.exe" -p
+
+**To use this app you will need Windows 10 1809 or a higher version.**
+
+## Uninstallation
+
+### Installer Version
+
+Simply uninstall the app from your system settings.
+
+### Compressed Version
+
+Start the app with the cleanup command line argument
+> "MangaUpdates Notifications.exe" --cleanup
+
+This will remove any files or registry entries the app has created, after that you can delete the app.
+
 ## Acknowledgements
 
-* [ShaanCoding](https://github.com/ShaanCoding/)
-* [Othneil Drew](https://github.com/othneildrew/Best-README-Template)
-* [ImgShields](https://shields.io/)
+* [CommunityToolkit.Mvvm](https://github.com/CommunityToolkit/dotnet)
+* [H.NotifyIcon](https://github.com/HavenDV/H.NotifyIcon)
+* [Microsoft.Toolkit.Uwp.Notifications](https://github.com/CommunityToolkit/WindowsCommunityToolkit)
+* [Microsoft.Xaml.Behaviors.Wpf](https://github.com/Microsoft/XamlBehaviorsWpf)
+* [ModernWpf](https://github.com/Kinnara/ModernWpf)
+* [NLog](https://github.com/NLog/NLog)
+* [Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json)
+* [Pictogrammers](https://pictogrammers.com)
 
 ## Screenshots
 ![Library](assets/screenshot1.png)
