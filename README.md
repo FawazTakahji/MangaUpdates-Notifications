@@ -1,3 +1,5 @@
+## This codebase is horrible 👍
+
 <br/>
 <p align="center">
   <a href="https://github.com/FawazTakhji/MangaUpdates-Notifications">
